@@ -1,4 +1,5 @@
-﻿using Dova.Common.InterfaceFactory;
+﻿using Dova.Common;
+using Dova.Common.InterfaceFactory;
 using Moq;
 
 namespace Dova.InterfaceProviders.Moq;
@@ -15,10 +16,14 @@ namespace Dova.InterfaceProviders.Moq;
 /// </summary>
 public class MoqInterfaceObjectProvider : IInterfaceObjectProvider
 {
-    public TInterface Get<TInterface>() where TInterface : class
+    public TInterface Get<TInterface>(IntPtr currentRefPtr) where TInterface : class, IJavaObject
     {
         var mock = new Mock<TInterface>(MockBehavior.Loose) {CallBase = true};
+
+        mock.Setup(x => x.CurrentRefPtr).Returns(currentRefPtr);
+        
         var obj = mock.Object;
+        
         return obj;
     }
 
