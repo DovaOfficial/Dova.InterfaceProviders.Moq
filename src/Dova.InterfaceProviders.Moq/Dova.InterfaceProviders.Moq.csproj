@@ -7,13 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dova" Version="0.1.0" />
       <PackageReference Include="Moq" Version="4.18.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Dova">
-        <HintPath>..\..\..\Dova\src\Dova\bin\Debug\net6.0\Dova.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>
