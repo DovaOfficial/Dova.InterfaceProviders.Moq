@@ -1,6 +1,7 @@
 ﻿using Dova.Common;
 using Dova.Common.InterfaceFactory;
 using Moq;
+using BindingFlags = System.Reflection.BindingFlags;
 
 namespace Dova.InterfaceProviders.Moq;
 
@@ -18,12 +19,33 @@ public class MoqInterfaceObjectProvider : IInterfaceObjectProvider
 {
     public TInterface Get<TInterface>(IntPtr currentRefPtr) where TInterface : class, IJavaObject
     {
-        var mock = new Mock<TInterface>(MockBehavior.Loose) {CallBase = true};
+        var type = typeof(TInterface);
+
+        if (type.IsClass && !type.IsAbstract)
+        {
+            return GetNewObject<TInterface>(currentRefPtr);
+        }
+
+        return GetMock<TInterface>(currentRefPtr);
+    }
+
+    private static TInterface GetNewObject<TInterface>(IntPtr currentRefPtr) where TInterface : class, IJavaObject
+    {
+        var type = typeof(TInterface);
+        var constructor = type.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new[] { typeof(IntPtr) });
+        var instance = constructor.Invoke(new object?[] { currentRefPtr });
+
+        return (TInterface)instance;
+    }
+
+    private static TInterface GetMock<TInterface>(IntPtr currentRefPtr) where TInterface : class, IJavaObject
+    {
+        var mock = new Mock<TInterface>(MockBehavior.Loose) { CallBase = true };
 
         mock.Setup(x => x.CurrentRefPtr).Returns(currentRefPtr);
-        
+
         var obj = mock.Object;
-        
+
         return obj;
     }
 
