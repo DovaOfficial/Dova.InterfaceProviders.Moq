@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Copyright>DovaOfficial © 2022</Copyright>
-        <Version>0.4.2.0</Version>
+        <Version>1.0.2.0</Version>
         <RepositoryUrl>https://github.com/DovaOfficial/Dova.InterfaceProviders.Moq</RepositoryUrl>
     </PropertyGroup>
 
